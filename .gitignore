@@ -1,0 +1,12 @@
+node_modules
+SQL IMPORT
+build
+db_server.zip
+dlder.php
+serverdash.js
+public/js/script*.js
+bot.jpg
+MapPositionsWithCells.json
+public/assets
+public/js
+public/css

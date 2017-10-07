@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dofucks</title>
+    <style type="text/css">
+    	body {
+    		background-color: #39394d;
+    		text-align: center;
+    		padding: 50px;
+    		pointer-events: none;
+    		cursor: none;
+    		-webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none; /* Safari */
+			 -khtml-user-select: none; /* Konqueror HTML */
+			   -moz-user-select: none; /* Firefox */
+			    -ms-user-select: none; /* Internet Explorer/Edge */
+			        user-select: none;
+    	}
+
+    	.progress {
+    		width: 500px;
+    		background-color: #fff;
+    		height: 20px;
+    		margin: auto;
+    	}
+
+    	#progress {
+    		background-color: #40a6d6;
+    		height: 20px;
+		    transition: width 1s;
+    	}
+
+        #text {
+            color: #fff;
+            padding: 10px 0;
+            font-family: calibri;
+        }
+
+        #error {
+            color: #f00;
+            padding: 10px 0;
+            font-family: calibri;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="logo">
+    	<img src="./img/dofucks-large.png"/>
+    </div>
+    <div id="loading">
+    	<div id="text">Initialisation...</div>
+    	<div class="progress">
+    		<div id="progress" style="width: 0%"></div>
+    	</div>
+        <div id="error"></div>
+    </div>
+    <script type="text/javascript">
+        const text = document.getElementById("text");
+    	const error = document.getElementById("error");
+    	const progress = document.getElementById('progress');
+    	const {ipcRenderer} = require('electron');
+        ipcRenderer.on('loadingData', (event, arg) => {
+            text.innerText = arg.text;
+            error.innerText = "";
+            progress.style.width = arg.pct+"%";
+        })
+        ipcRenderer.on('error', (event, text) => {
+            error.innerText = text;
+        })
+    </script>
+  </body>
+</html>

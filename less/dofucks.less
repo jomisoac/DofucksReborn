@@ -1,0 +1,53 @@
+@import "variables.less";
+
+body {
+  margin: 0;
+  background-color: @body-bg;
+}
+
+div.root {
+  display: flex;
+  overflow:hidden;
+}
+
+div.game {
+    width: 100vw;
+    height: @game-height;
+    background-color: black;
+    box-sizing: border-box;
+    float:left;
+}
+
+div.dofucks {
+  width: @bot-width;
+  height: @game-height;
+  overflow: auto;
+  font: 12px/20px 'Lucida Grande', Tahoma, Verdana, sans-serif;
+	background-color: white;
+  box-sizing: border-box;
+}
+
+.widget .collapsable {
+  //transition: all 0.25s ease-in-out;
+  overflow: hidden;
+}
+
+.spell-container {
+  position: relative;
+  margin: 0 !important;
+  max-height: 66px;
+  line-height: 100%;
+}
+
+.spell-id {
+  position: absolute;
+	left: 30%;
+	text-shadow: 2px 2px black;
+  z-index: 9;
+  color: white;
+}
+
+.spell-img {
+  position: relative;
+  width:100%;
+}

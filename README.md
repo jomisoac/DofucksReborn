@@ -1,19 +1,14 @@
 # Dofucks
 
-Educational Task Automation for Dofus Touch. For entertainment purposes only.
-
 **Using this tool may get you banned from the game. I am not responsible for any account that gets banned. You should not use this tool on your main account. Please respect the game and the other players.**
 
-The game itself and all its features are copyrighted to [Ankama](https://www.ankama.com)
+This tool provides access to the official client but **no single source is hosted here**
 
 # Summary
 - [DEMO](#demo)
 - [Install & run](#install--run)
-- [Want to contribue ?](#want-to-contribute-)
-- [To Ankama](#to-ankama)
 - [Side note](#side-note)
 - [Community](#community)
-- [Issues to fix](#issues-to-fix)
 - [Features](#features)
   - [Available through UI](#available-through-ui)
     - [Path](#path)
@@ -50,36 +45,14 @@ Finally, in another terminal, you can now start the game:
 npm run start
 ```
 
-# Want to contribute ?
-
-I'd love to !
-Keep in mind that is a side project, I make it on my free time and was first developed to improve my automation skills.
-
-# To Ankama
-
-The main goal of this project is to demonstrate and learn how automation can be made using User Interface. No harm to the game was ever intended.
-No profits from the game will ever be made.
-
 # Side note
 
-Please don't make an abusive use of this tool.
-
-I'd like it to be as full as possible,
-That's why I'm asking you to help me.
-
-Thank you if you contribute. Try to make comments in your PRs and use english for your var names.
-
-Again, thank you. I can't post a Tipeee link or whatever for earning money because this is not my own game, but in case you really want to donate, as a cool developper I am, feel free to contact me @ switooldev@gmail.com
+I've developped this tool for a year on my free time. I spent a lot on this.
+If you want to contribute, you can send a donation to this bitcoin address: **1Jrmsik9L7SCqgvfTvH5V3v2ePdmGFoCxw** or clone this repo to make it better ;)
 
 # Community
 
 You can join my discord here : [Discord server](https://discord.gg/e5S8EvV)
-
-# Issues to fix
-
-- [ ] getPath conflict on multi-account (https://puu.sh/xpN7M/478f3929bb.png).
-- [ ] Spell casted on dead mob.
-- [ ] Character do nothing when the pack of mobs move during the character try to start the fight.
 
 # Features
 

@@ -15,7 +15,7 @@ class AssetMapGetter extends Task {
 	checkContent(cb) {
 		this.inform("Checking AssetMap...", 20);
 		var keys;
-		var content = fs.readFileSync(publicDir+'/js/assetMap.json');
+		var content = fs.readFileSync(this.path+'/assetMap.json');
 		try {
 			var mani = JSON.parse(content);
 			this.assets = mani.files;
@@ -37,7 +37,7 @@ class AssetMapGetter extends Task {
 		this.inform(text, 15);
 		download(this.win, assetMapUrl, {
 			filename: 'assetMap.json',
-			directory: publicDir+'/js'
+			directory: this.path
 		}).then((res) => {
 			this.checkContent(cb);
 		}).catch((err) => {

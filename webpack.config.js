@@ -10,13 +10,13 @@ module.exports = {
   },
 
   output: {
-    path: './public/build',
+    path: './src/browser/build',
     filename: 'bundle.js',
     publicPath: 'http://localhost:8080/build/'
   },
 
   devServer: {
-    contentBase: './public',
+    contentBase: './src/browser',
     publicPath: 'http://localhost:8080/build/'
   },
 
@@ -43,6 +43,12 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$"))
+    new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
+    new webpack.optimize.UglifyJsPlugin({minimize: true}),
+    new webpack.DefinePlugin({
+      "process.env": { 
+        NODE_ENV: JSON.stringify("production") 
+      }
+    })
   ]
 }

@@ -20,7 +20,7 @@ class DownloadAssets extends Task {
 	dlManifestAsset(asset, _cb) {
 		this.inform("Downloading new assets : "+asset.split("/").pop()+"...", 20 + this.currentIndex*5);
 		download(this.win, host+'/'+asset, {
-			directory: publicDir+'/build',
+			directory: this.path+'/build',
 			filename: asset.split("/").pop()
 		}).then(() => {
 			this.hasDownloaded = true;
@@ -50,7 +50,7 @@ class DownloadAssets extends Task {
 	dlAsset(asset, _cb) {
 		this.inform("Downloading new assets : "+asset.split("/").pop()+"...", 30 + (this.currentAssetsIndex * 100 / this.assetsToDownload.length)/2);
 		download(this.win, host+'/'+asset, {
-			directory: publicDir+'/'+asset.replace(/^(.+)\/([^\/]+)$/, '$1'),
+			directory: this.path+'/'+asset.replace(/^(.+)\/([^\/]+)$/, '$1'),
 			filename: asset.split("/").pop()
 		}).then(() => {
 			this.hasDownloaded = true;
@@ -81,7 +81,7 @@ class DownloadAssets extends Task {
 		this.dlManifestAssets(() => {
 			this.dlAssets(() => {
 				if (this.hasDownloaded) {
-					fs.writeFileSync(publicDir+'/build/versions.json', JSON.stringify(this.versions));
+					fs.writeFileSync(this.path+'/versions.json', JSON.stringify(this.versions));
 				}
 				cb(false, this.hasDownloaded);
 			})

@@ -15,7 +15,7 @@ class ManifestGetter extends Task {
 	checkContent(cb) {
 		this.inform("Checking manifest...", 10);
 		var keys;
-		var content = fs.readFileSync(publicDir+'/js/manifest.json');
+		var content = fs.readFileSync(this.path+'/manifest.json');
 		try {
 			var mani = JSON.parse(content);
 			this.assets = mani.files;
@@ -43,7 +43,7 @@ class ManifestGetter extends Task {
 		this.inform(text, 5);
 		download(this.win, manifestUrl, {
 			filename: 'manifest.json',
-			directory: publicDir+'/js'
+			directory: this.path
 		}).then((res) => {
 			this.checkContent(cb);
 		}).catch((err) => {

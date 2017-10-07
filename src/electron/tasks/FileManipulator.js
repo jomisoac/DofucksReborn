@@ -56,16 +56,16 @@ class FileManipulator extends Task {
 	do(cb) {
 		this.inform("Now regexping....", 80);
 		try {
-			this.scriptContent = fs.readFileSync(publicDir+'/build/script.js').toString();
-			this.styleContent = fs.readFileSync(publicDir+'/build/styles-native.css', 'utf8');
+			this.scriptContent = fs.readFileSync(this.path+'/build/script.js').toString();
+			this.styleContent = fs.readFileSync(this.path+'/build/styles-native.css', 'utf8');
 			this.fixAssets();
 			this.removeAnalytics();
 			this.enableConsole();
 			this.disableLogger();
 			this.disableChangeMapAnimations();
 			this.createUtils();
-			fs.writeFileSync(publicDir+'/build/script.js', this.scriptContent);
-			fs.writeFileSync(publicDir+'/build/styles-native.css', this.styleContent);
+			fs.writeFileSync(this.path+'/build/script.js', this.scriptContent);
+			fs.writeFileSync(this.path+'/build/styles-native.css', this.styleContent);
 			cb(false);
 		} catch (e) {
 			console.error(e);

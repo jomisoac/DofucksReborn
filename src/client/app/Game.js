@@ -7,6 +7,7 @@ class Game extends React.Component {
   componentDidMount() {
     const doc = ReactDOM.findDOMNode(this).contentWindow;
     this.props.onDocumentCreated(this.props.tabKey, doc);
+    doc.process = window.process;
   }
 
   render() {

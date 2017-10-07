@@ -1,6 +1,9 @@
+const {app} = require('electron');
+
 class Task {
 	constructor(win) {
 		this.win = win;
+		this.path = app.getPath('userData');
 	}
 
 	inform(text, pct) {

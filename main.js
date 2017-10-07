@@ -19,14 +19,14 @@ app.on('ready', function() {
 		width: 800, 
 		height: 350, 
 		frame: false,
-		icon: __dirname + '/public/img/dofucks.png'
+		icon: __dirname + '/src/assets/dofucks.png'
 	});
 
 	function ready() {
 		inform(win, "I think it's now ready", 100);
 		setTimeout(() => {
-			mainWindow = new BrowserWindow({width: 1800, height: 1000, icon: __dirname + '/public/img/dofucks.png'});
-			mainWindow.loadURL('file://' + __dirname + '/public/index.html');
+			mainWindow = new BrowserWindow({width: 1800, height: 1000, icon: __dirname + '/src/assets/dofucks.png'});
+			mainWindow.loadURL('file://' + __dirname + '/src/browser/index.html');
 			mainWindow.openDevTools();
 			mainWindow.on('closed', function() {
 				mainWindow = null;
@@ -80,8 +80,8 @@ app.on('ready', function() {
 		win.webContents.send('error', text);
 	}
 
-	const appIcon = new Tray(__dirname + '/public/img/dofucks.png')
-	win.loadURL('file://' + __dirname + '/public/load.html');
+	const appIcon = new Tray(__dirname + '/src/assets/dofucks.png')
+	win.loadURL('file://' + __dirname + '/src/browser/load.html');
 
 	win.webContents.on('did-finish-load', (event, input) => {
 		checkAssets();

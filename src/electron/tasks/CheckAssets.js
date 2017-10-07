@@ -17,7 +17,7 @@ class CheckAssets extends Task {
 	loadCurrentManifestVersions() {
 		var keys = Object.keys(this.assets);
 		try {
-			var content = fs.readFileSync(publicDir+'/build/versions.json');
+			var content = fs.readFileSync(this.path+'/versions.json');
 			try {
 				var v = JSON.parse(content);
 				this.versions = v;
@@ -40,7 +40,7 @@ class CheckAssets extends Task {
 	loadCurrentAssetVersions() {
 		var keys = Object.keys(this.assets2);
 		try {
-			var content = fs.readFileSync(publicDir+'/build/versions.json');
+			var content = fs.readFileSync(this.path+'/versions.json');
 			try {
 				var v = JSON.parse(content);
 				this.versions = Object.assign(v, this.versions);

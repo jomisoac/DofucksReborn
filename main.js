@@ -1,10 +1,10 @@
 var electron, {app, BrowserWindow, Tray} = require('electron');
 
-var ManifestGetter = require('./javascripts/tasks/ManifestGetter');
-var DownloadAssets = require('./javascripts/tasks/DownloadAssets');
-var CheckAssets = require('./javascripts/tasks/CheckAssets');
-var FileManipulator = require('./javascripts/tasks/FileManipulator');
-var AssetMapGetter = require('./javascripts/tasks/AssetMapGetter');
+var ManifestGetter = require('./src/electron/tasks/ManifestGetter');
+var DownloadAssets = require('./src/electron/tasks/DownloadAssets');
+var CheckAssets = require('./src/electron/tasks/CheckAssets');
+var FileManipulator = require('./src/electron/tasks/FileManipulator');
+var AssetMapGetter = require('./src/electron/tasks/AssetMapGetter');
 
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin') {
@@ -17,7 +17,7 @@ app.on('ready', function() {
 
 	let win = new BrowserWindow({
 		width: 800, 
-		height: 600, 
+		height: 350, 
 		frame: false,
 		icon: __dirname + '/public/img/dofucks.png'
 	});

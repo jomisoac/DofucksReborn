@@ -5,7 +5,7 @@ module.exports = {
   entry: {
     app: [
       'webpack/hot/dev-server',
-      './javascripts/Dofucks.js'
+      './src/client/Dofucks.js'
     ]
   },
 

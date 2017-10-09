@@ -5,6 +5,8 @@ var DownloadAssets = require('./src/electron/tasks/DownloadAssets');
 var CheckAssets = require('./src/electron/tasks/CheckAssets');
 var FileManipulator = require('./src/electron/tasks/FileManipulator');
 var AssetMapGetter = require('./src/electron/tasks/AssetMapGetter');
+var CheckAppVersion = require('./src/electron/tasks/CheckAppVersion');
+var DownloadNewVersion = require('./src/electron/tasks/DownloadNewVersion');
 
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin') {
@@ -33,6 +35,28 @@ app.on('ready', function() {
 			});
 			win.close();
 		}, 1000);
+	}
+
+	function checkUpdates() {
+		var checkAppVersion = new CheckAppVersion(win);
+		checkAppVersion.do((err) => {
+			if (checkAppVersion.version != checkAppVersion.remoteVersion) {
+				downloadNewVersion(checkAppVersion.remoteVersion);
+			} else {
+				checkAssets();
+			}
+		});
+	}
+
+	function downloadNewVersion(remoteVersion) {
+		var dlNewVer = new DownloadNewVersion(win, remoteVersion);
+		dlNewVer.do((err) => {
+			if (err) {
+				return inform_err(win, err);
+			}
+			//app.quit();
+			checkAssets();
+		});
 	}
 
 	function checkAssets() {
@@ -84,6 +108,6 @@ app.on('ready', function() {
 	win.loadURL('file://' + __dirname + '/src/browser/load.html');
 
 	win.webContents.on('did-finish-load', (event, input) => {
-		checkAssets();
+		checkUpdates();
 	})
 });

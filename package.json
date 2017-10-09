@@ -1,7 +1,10 @@
 {
   "name": "Dofucks",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "main.js",
+  "productName": "Dofucks",
+  "author": "SwiTool",
+  "description": "Play or let the game be played itself",
   "devDependencies": {
     "babel-core": "^6.7.2",
     "babel-loader": "^6.2.4",

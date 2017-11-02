@@ -24,7 +24,6 @@ class Seller {
 			return false;
 		}
 		if (this.currentItemIndex < this.wantToSell.length) {
-			var objectGID = this.wantToSell[this.currentItemIndex];
 			var item = this.getItem(this.wantToSell[this.currentItemIndex++]);
 			return item ? item : this.getNextItem();
 		} else {

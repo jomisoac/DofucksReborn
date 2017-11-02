@@ -3,8 +3,6 @@ import React from 'react';
 import Widget from './Widget';
 import Module from '../Module';
 
-import {List} from 'material-ui/List';
-
 import LevelMinMax from '../modules/xper/LevelMinMax';
 
 class XPer extends Module {

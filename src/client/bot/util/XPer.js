@@ -63,7 +63,6 @@ class XPer {
 	}
 
 	goCheckMobs() {
-		var i = this.window.isoEngine.mapRenderer.interactiveElements;
 		var interactives = this.window.isoEngine._getAllInteractives();
 		for (var l = 0; l < interactives.length; l++) {
 			var npc = null;

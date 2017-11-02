@@ -1,7 +1,5 @@
 import React from 'react';
 
-import {NotifOptions} from './Options';
-
 class Module extends React.Component {
   ready() {}
   onLoaded(data) {return data;}

@@ -1,8 +1,5 @@
-if (require('./src/electron/sqrlwin')()) return;
 var electron, {app, BrowserWindow, Tray, autoUpdater, dialog} = require('electron');
-
-
-const url = "http://dofucks.com:1337";
+if (require('./src/electron/sqrlwin')(app)) return;
 
 const appVersion = require('./package.json').version;
 const os = require('os').platform();
@@ -81,11 +78,10 @@ app.on('ready', function() {
 
     if (process.env.NODE_ENV !== 'development') {
       updateFeed = os === 'darwin' ?
-        url+'/updates/latest' :
-        url+'/releases/win32';
+        'http://dofucks.com:1337/updates/latest' :
+        'http://download.dofucks.com/win32';
 
     	autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion);
-      inform(win, updateFeed + '?v=' + appVersion, 0);
     	autoUpdater.checkForUpdates();
     	autoUpdater.on('update-available', () => {
     		console.log('update available');
@@ -108,7 +104,7 @@ app.on('ready', function() {
     	autoUpdater.on('error', message => {
     	  console.error('There was a problem updating the application')
     	  console.error(message);
-        inform_err(win, message);
+        //inform_err(win, message);
     	});
     }
   }
@@ -129,5 +125,8 @@ app.on('ready', function() {
 	win.webContents.on('did-finish-load', (event, input) => {
 		checkAssets();
     upd();
+		setInterval(() => {
+			upd();
+		}, 1000*60*10);
 	})
 });

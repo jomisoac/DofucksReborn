@@ -9,10 +9,6 @@ class FileManipulator extends Task {
 		this.styleContent = null;
 	}
 
-	fixLineBreaks() {
-		this.scriptContent = this.scriptContent.replace(/\(\),\n/g, '(),');
-	}
-
 	fixAssets() {
 		this.scriptContent = this.scriptContent.replace(/cdvfile:\/\/localhost\/persistent\/data\/assets/g, 'assets');
 		// script file is in /build, meaning that we need to access via ../ to assets
@@ -25,6 +21,10 @@ class FileManipulator extends Task {
 
 	enableConsole() {
 		this.scriptContent = this.scriptContent.replace(/(overrideConsole.=.function\(\) {)([^])*(},._.logUncaughtExceptions)/g, '$1$3');
+	}
+
+	enableAdminMode() {
+		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2}\.prototype)\.isModeratorOrMore.[\S\s]*\1(.isModerator)/, "$1.isModeratorOrMore=function(){return true},$1$2");
 	}
 
 	disableLogger() {
@@ -62,7 +62,7 @@ class FileManipulator extends Task {
 		try {
 			this.scriptContent = fs.readFileSync(this.path+'/build/script.js').toString();
 			this.styleContent = fs.readFileSync(this.path+'/build/styles-native.css', 'utf8');
-			this.fixLineBreaks();
+			this.enableAdminMode();
 			this.fixAssets();
 			this.removeAnalytics();
 			this.enableConsole();

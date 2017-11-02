@@ -1,7 +1,29 @@
-module.exports = function() {
+module.exports = function(app) {
   if (process.platform !== 'win32') {
     return false;
   }
+
+  const ChildProcess = require('child_process');
+  const path = require('path');
+
+  const appFolder = path.resolve(process.execPath, '..');
+  const rootAtomFolder = path.resolve(appFolder, '..');
+  const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+  const exeName = path.basename(process.execPath);
+
+  const spawn = function(command, args) {
+   let spawnedProcess, error;
+
+   try {
+     spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+   } catch (error) {}
+
+   return spawnedProcess;
+  };
+
+  const spawnUpdate = function(args) {
+   return spawn(updateDotExe, args);
+  };
 
   var squirrelCommand = process.argv[1];
   switch (squirrelCommand) {
@@ -15,17 +37,17 @@ module.exports = function() {
       // - Write to the registry for things like file associations and
       //   explorer context menus
 
-      // Always quit when done
-      app.quit();
+      spawnUpdate(['--createShortcut', exeName]);
 
+      setTimeout(app.quit, 1000);
       return true;
     case '--squirrel-uninstall':
       // Undo anything you did in the --squirrel-install and
       // --squirrel-updated handlers
 
-      // Always quit when done
-      app.quit();
+      spawnUpdate(['--removeShortcut', exeName]);
 
+      setTimeout(app.quit, 1000);
       return true;
     case '--squirrel-obsolete':
       // This is called on the outgoing version of your app before

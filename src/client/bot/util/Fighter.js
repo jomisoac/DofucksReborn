@@ -522,7 +522,7 @@ class Fighter {
 		var spellLevelId = spell.getSpellLevelId();
 		for (var i = 0; i < spell.getEffectsIds().length; i++) {
 			var effect = spell.effectInstances[spellLevelId + "-effects-" + i];
-			if (effect.effect.boost == true && -1 !== this.boostEffects.indexOf(effect.effect.id)) {
+			if (effect.effect.boost === true && -1 !== this.boostEffects.indexOf(effect.effect.id)) {
 				return true;
 			}
 		}

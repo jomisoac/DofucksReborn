@@ -9,6 +9,10 @@ class FileManipulator extends Task {
 		this.styleContent = null;
 	}
 
+	fixLineBreaks() {
+		this.scriptContent = this.scriptContent.replace(/\(\),\n/g, '(),');
+	}
+
 	fixAssets() {
 		this.scriptContent = this.scriptContent.replace(/cdvfile:\/\/localhost\/persistent\/data\/assets/g, 'assets');
 		// script file is in /build, meaning that we need to access via ../ to assets
@@ -29,8 +33,8 @@ class FileManipulator extends Task {
 
 	disableChangeMapAnimations() {
 		// rewrite loading transitions
-		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2}\.prototype)\._runLoadingFadeInTransition.*\1(._runLoadingFadeOutTransition)/, "$1._runLoadingFadeInTransition=function(){this._loadingFadeInTransitionRunning=!0,this._waitingForMessage=!0,this.showLoadingProgress(0);this.mapScene.renderingParams.ratio=0;var e=this;e._saveImageForTransition(\"current\"),e._loadingFadeInTransitionRunning=!1,e._startLoading();},$1$2");
-		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2}\.prototype)\._runLoadingFadeOutTransition.*\1(.makeActorWalkIn)/, "$1._runLoadingFadeOutTransition=function(){var e = this,t = this.mapScene;null !== e._mapSceneTransitionGraphic && (e._mapSceneTransitionGraphic.remove(), e._mapSceneTransitionGraphic = null);t.setShader(\"unfiltering\"), t.renderingParams.ratio = .15, e._hideLoadingProgress();},$1$2");
+		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2}\.prototype)\._runLoadingFadeInTransition.[\S\s]*\1(._runLoadingFadeOutTransition)/, "$1._runLoadingFadeInTransition=function(){this._loadingFadeInTransitionRunning=!0,this._waitingForMessage=!0,this.showLoadingProgress(0);this.mapScene.renderingParams.ratio=0;var e=this;e._saveImageForTransition(\"current\"),e._loadingFadeInTransitionRunning=!1,e._startLoading();},$1$2");
+		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2}\.prototype)\._runLoadingFadeOutTransition.[\S\s]*\1(.makeActorWalkIn)/, "$1._runLoadingFadeOutTransition=function(){var e = this,t = this.mapScene;null !== e._mapSceneTransitionGraphic && (e._mapSceneTransitionGraphic.remove(), e._mapSceneTransitionGraphic = null);t.setShader(\"unfiltering\"), t.renderingParams.ratio = .15, e._hideLoadingProgress();},$1$2");
 	}
 
 	createUtils() {
@@ -58,6 +62,7 @@ class FileManipulator extends Task {
 		try {
 			this.scriptContent = fs.readFileSync(this.path+'/build/script.js').toString();
 			this.styleContent = fs.readFileSync(this.path+'/build/styles-native.css', 'utf8');
+			this.fixLineBreaks();
 			this.fixAssets();
 			this.removeAnalytics();
 			this.enableConsole();

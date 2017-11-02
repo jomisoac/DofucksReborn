@@ -1,6 +1,7 @@
+.DS_Store
 node_modules
 SQL IMPORT
-build
+builds
 db_server.zip
 dlder.php
 serverdash.js
@@ -10,3 +11,4 @@ MapPositionsWithCells.json
 public/assets
 public/js
 public/css
+repo_tmp

@@ -10,13 +10,14 @@
 <script type="text/javascript">window.utils = {};(function() {var navig = {appVersion: "Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-N920T Build/MMB29K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/58.0.3029.83 Mobile Safari/537.36",platform: "Linux armv7l",userAgent: "Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-N920T Build/MMB29K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/58.0.3029.83 Mobile Safari/537.36"};var setProp = function(name, value) {var getProp = function() {return navig[name];};if (Object.defineProperty) {Object.defineProperty(navigator, name, {get: getProp});} else if (Object.prototype.__defineGetter__) {navigator.__defineGetter__(name, getProp);}};for (var i in navig) {setProp(i, navig[i]);}})();</script>
 <script type="text/javascript">
 	var link = document.createElement("link")
+	var appData = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : '/var/local');
 	link.setAttribute('rel', 'stylesheet');
-	link.setAttribute('href', process.env.APPDATA+"/Dofucks/build/styles-native.css");
+  link.setAttribute('href', appData+"/Dofucks/build/styles-native.css");
 	document.body.appendChild(link);
 
 	var script = document.createElement("script");
 	script.setAttribute('type', 'text/javascript');
-	script.setAttribute('src', process.env.APPDATA+"/Dofucks/build/script.js");
+	script.setAttribute('src', appData+"/Dofucks/build/script.js");
 	document.body.appendChild(script);
 </script>
 </body>

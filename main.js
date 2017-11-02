@@ -1,12 +1,17 @@
-var electron, {app, BrowserWindow, Tray} = require('electron');
+if (require('./src/electron/sqrlwin')()) return;
+var electron, {app, BrowserWindow, Tray, autoUpdater, dialog} = require('electron');
+
+
+const url = "http://dofucks.com:1337";
+
+const appVersion = require('./package.json').version;
+const os = require('os').platform();
 
 var ManifestGetter = require('./src/electron/tasks/ManifestGetter');
 var DownloadAssets = require('./src/electron/tasks/DownloadAssets');
 var CheckAssets = require('./src/electron/tasks/CheckAssets');
 var FileManipulator = require('./src/electron/tasks/FileManipulator');
 var AssetMapGetter = require('./src/electron/tasks/AssetMapGetter');
-var CheckAppVersion = require('./src/electron/tasks/CheckAppVersion');
-var DownloadNewVersion = require('./src/electron/tasks/DownloadNewVersion');
 
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin') {
@@ -18,8 +23,8 @@ app.commandLine.appendSwitch("disable-renderer-backgrounding");
 app.on('ready', function() {
 
 	let win = new BrowserWindow({
-		width: 800, 
-		height: 350, 
+		width: 800,
+		height: 350,
 		frame: false,
 		icon: __dirname + '/src/assets/dofucks.png'
 	});
@@ -35,28 +40,6 @@ app.on('ready', function() {
 			});
 			win.close();
 		}, 1000);
-	}
-
-	function checkUpdates() {
-		var checkAppVersion = new CheckAppVersion(win);
-		checkAppVersion.do((err) => {
-			if (checkAppVersion.version != checkAppVersion.remoteVersion) {
-				downloadNewVersion(checkAppVersion.remoteVersion);
-			} else {
-				checkAssets();
-			}
-		});
-	}
-
-	function downloadNewVersion(remoteVersion) {
-		var dlNewVer = new DownloadNewVersion(win, remoteVersion);
-		dlNewVer.do((err) => {
-			if (err) {
-				return inform_err(win, err);
-			}
-			//app.quit();
-			checkAssets();
-		});
 	}
 
 	function checkAssets() {
@@ -93,6 +76,43 @@ app.on('ready', function() {
 		});
 	}
 
+  function upd() {
+    var updateFeed = '';
+
+    if (process.env.NODE_ENV !== 'development') {
+      updateFeed = os === 'darwin' ?
+        url+'/updates/latest' :
+        url+'/releases/win32';
+
+    	autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion);
+      inform(win, updateFeed + '?v=' + appVersion, 0);
+    	autoUpdater.checkForUpdates();
+    	autoUpdater.on('update-available', () => {
+    		console.log('update available');
+    	});
+    	autoUpdater.on('update-not-available', () => {
+    	});
+    	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+    		const dialogOpts = {
+    			type: 'info',
+    			buttons: ['Restart', 'Later'],
+    			title: 'Application Update',
+    			message: process.platform === 'win32' ? releaseNotes : releaseName,
+    			detail: 'A new version has been downloaded. Restart the application to apply the update.'
+    		}
+
+    		dialog.showMessageBox(dialogOpts, (response) => {
+    			if (response === 0) autoUpdater.quitAndInstall()
+    		})
+    	});
+    	autoUpdater.on('error', message => {
+    	  console.error('There was a problem updating the application')
+    	  console.error(message);
+        inform_err(win, message);
+    	});
+    }
+  }
+
 	function inform(win, text, pct) {
 		win.webContents.send('loadingData', {
 			"text": text,
@@ -104,10 +124,10 @@ app.on('ready', function() {
 		win.webContents.send('error', text);
 	}
 
-	const appIcon = new Tray(__dirname + '/src/assets/dofucks.png')
 	win.loadURL('file://' + __dirname + '/src/browser/load.html');
-
+  //win.openDevTools();
 	win.webContents.on('did-finish-load', (event, input) => {
-		checkUpdates();
+		checkAssets();
+    upd();
 	})
 });

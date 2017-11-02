@@ -61,6 +61,7 @@
     	const progress = document.getElementById('progress');
     	const {ipcRenderer} = require('electron');
         ipcRenderer.on('loadingData', (event, arg) => {
+          console.log(arg.text);
             text.innerText = arg.text;
             error.innerText = "";
             progress.style.width = arg.pct+"%";

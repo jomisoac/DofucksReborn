@@ -1,15 +1,10 @@
-#/bin/sh
+#/bin/bash
 
-PATCH_FILE="build/patch"
-
-mkdir -p repo_tmp build
+mkdir -p repo_tmp
 
 # Copy needed resources to new folder and go into it
-cp -r src main.js package.json repo_tmp
+cp -R src main.js package.json webpack.config.js repo_tmp
 cd repo_tmp
-
-# remove client source
-rm -rf src/client
 
 # remove development index.html
 rm src/browser/index.html
@@ -19,24 +14,23 @@ mv src/browser/index_prod.html src/browser/index.html
 
 # install dependencies
 npm install --production
-rm -f package-lock.json
+npm run prod
+
+# remove uselss files
+rm -rf src/client
+rm -rf src/assets/Dofucks.ai
+rm -rf src/assets/dofucks.icns
+rm -rf src/assets/Dofucks.svg
+rm -rf package-lock.json
+rm -rf webpack.config.js
 
 # moving back to the root directory, pack with asar
 cd ..
-asar pack repo_tmp build/app.asar
-
-# get patch version if exist or set it to 1
-if [ -e $PATCH_FILE ]; then
-	ver=$(cat $PATCH_FILE)
-	ver=$((ver+1))
-else
-	ver=1
-fi
-
-# write new patch version
-echo -n $ver > $PATCH_FILE
+#asar pack repo_tmp build/app.asar
 
 # remove temporary folder repo_tmp
-rm -rf repo_tmp
+#rm -rf repo_tmp
 
 echo "Done."
+
+#    --app-version=$npm_package_version --version-string.CompanyName='Dofucks Reborn' --version-string.FileDescription=$npm_package_productName --version-string.OriginalFilename='Dofucks.exe' --version-string.InternalName=$npm_package_productName --version-string.ProductName=$npm_package_productName --version-string.ProductVersion=$npm_package_version --asar=true --icon=src/assets/dofucks.ico --overwrite",

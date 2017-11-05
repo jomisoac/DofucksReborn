@@ -6,8 +6,6 @@ import {ListItem} from 'material-ui/List';
 import VolumeOff from 'material-ui/svg-icons/av/volume-off';
 import VolumeOn from 'material-ui/svg-icons/av/volume-up';
 
-var random = require("random-js")();
-
 class ModeratorOnMap extends Notification {
   constructor(props) {
     super(props);

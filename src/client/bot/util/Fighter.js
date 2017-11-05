@@ -34,7 +34,7 @@ class Fighter {
 
   	this.boostEffects = [
       110,111,112,114,115,117,118,119,120,121,123,124,125,126,128,136,137,138,142,158,160,
-      161,752,753,165,174,176,178,182,183,184,788,210,211,212,213,214,240,241,242,243,
+      161,752,753,165,174,176,178,182,183,184,776,788,210,211,212,213,214,240,241,242,243,
       244,250,251,252,253,254,260,261,262,263,264,1039,1040,281,282,283,284,285,286,287,
       288,289,290,291,292,293,1054
     ];
@@ -363,37 +363,6 @@ class Fighter {
 		return true;
 	}
 
-	/*moveToCastSpellOnCell(spell, cellId) {
-		var closestDistance = 999;
-		var closestDistanceCellId = 0;
-		var me = this.window.isoEngine.actorManager.userActor;
-		var reachableZone = this.window.utils.getReachableZone(me, me.cellId);
-		for (var cell in reachableZone) {
-			var zone = reachableZone[cell];
-			if (zone.reachable && zone.ap == 0) {
-				var targettable = this.getSpellSightOfViewAtCell(cell, spell);
-				if (targettable.indexOf(cellId) != -1) {
-					var distance = this.window.utils.losDetector.getCellDistance(cell, me.cellId);
-					if (distance <= closestDistance) {
-						closestDistance = distance;
-						closestDistanceCellId = cell;
-					}
-				}
-			}
-		}
-		if (!closestDistance || !closestDistanceCellId) {
-			console.debug("There is no way to hit enemy with that spell :(");
-			return false;
-		}
-		console.debug("The perfect cell should be "+closestDistanceCellId);
-		var occupiedCells = this.window.isoEngine.actorManager.occupiedCells;
-		var stats = this.getFighterStats();
-		var path = this.window.utils.pathFinder.getPath(me.cellId, closestDistanceCellId, occupiedCells, false, false);
-		var path = path.slice(0, stats.movementPointsCurrent + 1);
-		this.move(path);
-		return true;
-	}*/
-
 	canCastSpell(spell, actor) {
 		var me = this.window.gui.fightManager.getAvailableFighters()[this.window.gui.playerData.id];
 		var spellData = me.spells[spell.spellId];
@@ -520,13 +489,18 @@ class Fighter {
 	isBoostSpell(spell) {
 		var spellLevel = spell.spellLevel;
 		var spellLevelId = spell.getSpellLevelId();
+    var isDamageSpell = false;
+    var isBoost = false;
 		for (var i = 0; i < spell.getEffectsIds().length; i++) {
 			var effect = spell.effectInstances[spellLevelId + "-effects-" + i];
+      if (effect.isDamageEffect()) {
+        return false;
+      }
 			if (effect.effect.boost === true && -1 !== this.boostEffects.indexOf(effect.effect.id)) {
-				return true;
+				isBoost = true;
 			}
 		}
-		return false;
+		return isBoost;
 	}
 
 	isSummonSpell(spell) {

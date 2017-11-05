@@ -27,6 +27,14 @@ class FileManipulator extends Task {
 		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2}\.prototype)\.isModeratorOrMore.[\S\s]*\1(.isModerator)/, "$1.isModeratorOrMore=function(){return true},$1$2");
 	}
 
+	displaySentMessages() {
+		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2})\.sendMessage=function\(([a-zA-Z]{1,2}),([a-zA-Z]{1,2})\){\1\.send\("sendMessage"/, '$1.sendMessage=function($2,$3){top.console.log($2,$3);$1.send("sendMessage"');
+	}
+
+	enableAccessToAllFunctions() {
+		this.scriptContent = this.scriptContent.replace(/(return ([a-zA-Z]{1,2})\.([a-zA-Z]{1,2})=([a-zA-Z]{1,2}),\2\.([a-zA-Z]{1,2})=([a-zA-Z]{1,2}),\2\.([a-zA-Z]{1,2})="",\2\(0\))/, 'window.master=$2;$1')
+	}
+
 	disableLogger() {
 		this.scriptContent = this.scriptContent.replace(/(, window\.fetch\(.+\/logger)/, '; return null $1');
 	}
@@ -66,6 +74,8 @@ class FileManipulator extends Task {
 			this.fixAssets();
 			this.removeAnalytics();
 			this.enableConsole();
+			this.enableAccessToAllFunctions();
+			this.displaySentMessages();
 			this.disableLogger();
 			this.disableChangeMapAnimations();
 			this.createUtils();

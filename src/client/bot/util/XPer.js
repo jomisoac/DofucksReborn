@@ -77,7 +77,11 @@ class XPer {
 					totalLevel += mobs[k].staticInfos.level;
 				}
 				if (totalLevel >= this.minLvl && totalLevel <= this.maxLvl) {
-          this.window.Dofucks.Mover.goToCell(mob._position, () => {}, false);
+          this.window.Dofucks.Mover.goToCell(mob._position, () => {
+						setTimeout(() => {
+							this.goCheckMobs();
+						}, 500);
+					}, false);
 					//this.window.isoEngine.attackActor(mob.actorId);
 					return true;
 				}

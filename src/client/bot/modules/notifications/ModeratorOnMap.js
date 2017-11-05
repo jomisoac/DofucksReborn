@@ -6,6 +6,8 @@ import {ListItem} from 'material-ui/List';
 import VolumeOff from 'material-ui/svg-icons/av/volume-off';
 import VolumeOn from 'material-ui/svg-icons/av/volume-up';
 
+var random = require("random-js")();
+
 class ModeratorOnMap extends Notification {
   constructor(props) {
     super(props);
@@ -37,9 +39,10 @@ class ModeratorOnMap extends Notification {
   }
 
   MapComplementaryInformationsDataMessage(e) {
+    var t = 0;
     for (var i = 0; i < e.actors.length; i++) {
       var actor = e.actors[i];
-      this.checkName(actor.name);
+      this.checkName(actor.name)
     }
   }
 

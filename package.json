@@ -1,6 +1,6 @@
 {
   "name": "Dofucks",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "main.js",
   "productName": "Dofucks",
   "author": "SwiTool",
@@ -39,9 +39,12 @@
     "create_asar": "./create_asar.sh",
     "pack:osx": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=darwin --arch=x64 --sign='DofucksSquirrel' --icon=src/assets/dofucks.icns --asar --overwrite",
     "pack:unix": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=linux --arch=x64 --icon=src/assets/dofucks.ico --asar --overwrite",
+    "pack:armv7": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=linux --arch=armv7l --icon=src/assets/dofucks.ico --asar --overwrite",
     "pack:win": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=win32 --arch=x64 --version-string.CompanyName='Dofucks Reborn' --version-string.FileDescription=$npm_package_productName --version-string.OriginalFilename='Dofucks.exe' --version-string.InternalName=$npm_package_productName --version-string.ProductName=$npm_package_productName --version-string.ProductVersion=$npm_package_version --asar --icon=src/assets/dofucks.ico --overwrite",
+    "pack:win32": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=win32 --arch=ia32 --version-string.CompanyName='Dofucks Reborn' --version-string.FileDescription=$npm_package_productName --version-string.OriginalFilename='Dofucks.exe' --version-string.InternalName=$npm_package_productName --version-string.ProductName=$npm_package_productName --version-string.ProductVersion=$npm_package_version --asar --icon=src/assets/dofucks.ico --overwrite",
     "installer:osx": "./node_modules/.bin/electron-installer-dmg --icon=src/assets/dofucks.ico builds/Dofucks-darwin-x64/Dofucks.app/ builds/Dofucks",
     "installer:win": "./node_modules/.bin/grunt create-windows-installer",
+    "installer:win32": "./node_modules/.bin/grunt create-windows-installer32",
     "prod": "./node_modules/.bin/webpack -p",
     "watch": "./node_modules/.bin/webpack-dev-server",
     "electron-rebuild": "./node_modules/.bin/electron-rebuild"

@@ -1,4 +1,4 @@
-var electron, {app, BrowserWindow, Tray, autoUpdater, dialog} = require('electron');
+var electron, {app, BrowserWindow, Tray, autoUpdater, dialog, session} = require('electron');
 if (require('./src/electron/sqrlwin')(app)) return;
 
 const appVersion = require('./package.json').version;
@@ -18,12 +18,20 @@ app.on('window-all-closed', function() {
 
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
 app.on('ready', function() {
+	require('./src/electron/Menu');
+	session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+		details.requestHeaders['User-Agent'] = 'Mozilla/5.0 (Linux; Android 7.1.1; ONEPLUS A5000 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Crosswalk/15.44.384.13 Mobile Safari/537.36';
+		callback({ cancel: false, requestHeaders: details.requestHeaders });
+	});
 
 	let win = new BrowserWindow({
 		width: 800,
 		height: 350,
 		frame: false,
-		icon: __dirname + '/src/assets/dofucks.png'
+		icon: __dirname + '/src/assets/dofucks.png',
+		webPreferences: {
+			backgroundThrottling: false
+		}
 	});
 
 	function ready() {

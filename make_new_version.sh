@@ -29,11 +29,10 @@ check_error
 
 cd builds
 
+zip -r Dofucks.zip Dofucks-darwin-x64
 scp Dofucks-$version* RELEASES switool@52.172.219.38:/var/www/updates/releases/win32
 ssh switool@52.172.219.38 "mkdir -p /var/www/updates/releases/darwin/$version"
-zip -r Dofucks.zip Dofucks-darwin-x64
 scp Dofucks.zip switool@52.172.219.38:/var/www/updates/releases/darwin/$version
-
 scp Dofucks.dmg switool@52.172.219.38:/var/www/updates/releases/darwin
 scp DofucksSetup.exe switool@52.172.219.38:/var/www/updates/releases/win32
 

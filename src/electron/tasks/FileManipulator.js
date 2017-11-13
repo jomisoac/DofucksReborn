@@ -31,6 +31,11 @@ class FileManipulator extends Task {
 		this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2})\.sendMessage=function\(([a-zA-Z]{1,2}),([a-zA-Z]{1,2})\){\1\.send\("sendMessage"/, '$1.sendMessage=function($2,$3){top.console.log($2,$3);$1.send("sendMessage"');
 	}
 
+	disableAppBackground() {
+		this.scriptContent = this.scriptContent.replace(/,this.setupAppTransition\(\)/, '');
+		//this.scriptContent = this.scriptContent.replace(/([a-zA-Z]{1,2})\.emit\("appLeaveBackground"\)/, 'void(0)');
+	}
+
 	enableAccessToAllFunctions() {
 		this.scriptContent = this.scriptContent.replace(/(return ([a-zA-Z]{1,2})\.([a-zA-Z]{1,2})=([a-zA-Z]{1,2}),\2\.([a-zA-Z]{1,2})=([a-zA-Z]{1,2}),\2\.([a-zA-Z]{1,2})="",\2\(0\))/, 'window.master=$2;$1')
 	}
@@ -75,6 +80,7 @@ class FileManipulator extends Task {
 			this.removeAnalytics();
 			this.enableConsole();
 			this.enableAccessToAllFunctions();
+			this.disableAppBackground();
 			this.displaySentMessages();
 			this.disableLogger();
 			this.disableChangeMapAnimations();

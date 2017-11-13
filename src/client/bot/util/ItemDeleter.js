@@ -12,7 +12,7 @@ class ItemDeleter {
     var items2Delete = itemsToDelete ? itemsToDelete : this.wantToDelete;
     for (var index in this.window.gui.playerData.inventory.objects) {
       var object = this.window.gui.playerData.inventory.objects[index];
-      if (items2Delete.indexOf(object.objectGID) !== -1) {
+      if (items2Delete.indexOf(object.objectGID) !== -1 && object.position > 15) {
         var objqty = object.quantity;
         var wait = this.deleteItem(object, objqty);
         if (wait > 0) {

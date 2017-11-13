@@ -7,6 +7,7 @@ import Seller from './widgets/Seller';
 import Harvester from './widgets/Harvester';
 import XPer from './widgets/XPer';
 import Notifications from './widgets/Notifications';
+import Characteristics from './widgets/Characteristics';
 import Sitter from './widgets/Sitter';
 import Deleter from './widgets/Deleter';
 import Module from './Module';
@@ -22,6 +23,7 @@ import ItemDeleter from './util/ItemDeleter';
 import Farmer from './util/Farmer';
 import DofucksSitter from './util/Sitter';
 import Follower from './util/Follower';
+import CharacteristicsUpgrader from './util/CharacteristicsUpgrader';
 
 import Analytics from '../app/Analytics';
 
@@ -49,6 +51,7 @@ class Bot extends Module {
     this.props.win.Dofucks.Farmer = new Farmer(this.props.win);
     this.props.win.Dofucks.Sitter = new DofucksSitter(this.props.win);
     this.props.win.Dofucks.Follower = new Follower(this.props.win);
+    this.props.win.Dofucks.CharacteristicsUpgrader = new CharacteristicsUpgrader(this.props.win);
   }
 
   render() {
@@ -62,6 +65,7 @@ class Bot extends Module {
           <Seller win={this.props.win}/>
           <Deleter win={this.props.win}/>
           <Sitter win={this.props.win}/>
+          <Characteristics win={this.props.win}/>
           <Notifications win={this.props.win}/>
         </div>
       </MuiThemeProvider>

@@ -31,7 +31,7 @@ class CharacteristicsUpgrader {
     var sc = this.getStatCost(statCosts, this.window.gui.playerData.characters.mainCharacter.characteristics[this.toUpgrade].base);
     var sp = this.window.gui.playerData.characters.mainCharacter.characteristics.statsPoints;
     var statId = this.statIds[this.toUpgrade];
-    var pointsSpent = ~~(sp / sc);
+    var pointsSpent = ~~(sp / sc)*sc;
     if (sp > 0 && pointsSpent >= sc) {
       this.window.dofus.connectionManager.sendMessage('StatsUpgradeRequestMessage', {statId: statId, boostPoint: pointsSpent});
     }

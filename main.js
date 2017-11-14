@@ -10,6 +10,8 @@ var CheckAssets = require('./src/electron/tasks/CheckAssets');
 var FileManipulator = require('./src/electron/tasks/FileManipulator');
 var AssetMapGetter = require('./src/electron/tasks/AssetMapGetter');
 
+var downloaded = false;
+
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin') {
 		app.quit();
@@ -97,6 +99,7 @@ app.on('ready', function() {
     	autoUpdater.on('update-not-available', () => {
     	});
     	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+				downloaded = true;
     		const dialogOpts = {
     			type: 'info',
     			buttons: ['Restart', 'Later'],
@@ -134,6 +137,7 @@ app.on('ready', function() {
 		checkAssets();
     upd();
 		setInterval(() => {
+			if (downloaded) return;
 			upd();
 		}, 1000*60*10);
 	})

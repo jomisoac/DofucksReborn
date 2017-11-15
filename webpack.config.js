@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var EncodingPlugin = require('webpack-encoding-plugin');
+
 module.exports = {
   entry: {
     app: [
@@ -44,6 +46,9 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
+    new EncodingPlugin({
+      encoding: 'utf-8'
+    })
     /*new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("production")

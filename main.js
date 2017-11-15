@@ -1,5 +1,8 @@
-var electron, {app, BrowserWindow, Tray, autoUpdater, dialog, session} = require('electron');
+var electron, {app, BrowserWindow, Tray, autoUpdater, dialog, session, powerSaveBlocker} = require('electron');
 if (require('./src/electron/sqrlwin')(app)) return;
+
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
+powerSaveBlocker.start('prevent-app-suspension');
 
 const appVersion = require('./package.json').version;
 const os = require('os').platform();
@@ -18,29 +21,34 @@ app.on('window-all-closed', function() {
 	}
 });
 
-app.commandLine.appendSwitch("disable-renderer-backgrounding");
 app.on('ready', function() {
 	require('./src/electron/Menu');
-	session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-		details.requestHeaders['User-Agent'] = 'Mozilla/5.0 (Linux; Android 7.1.1; ONEPLUS A5000 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Crosswalk/15.44.384.13 Mobile Safari/537.36';
-		callback({ cancel: false, requestHeaders: details.requestHeaders });
-	});
 
 	let win = new BrowserWindow({
 		width: 800,
 		height: 350,
 		frame: false,
-		icon: __dirname + '/src/assets/dofucks.png',
-		webPreferences: {
-			backgroundThrottling: false
-		}
+		icon: __dirname + '/src/assets/dofucks.png'
 	});
 
 	function ready() {
 		inform(win, "I think it's now ready", 100);
 		setTimeout(() => {
-			mainWindow = new BrowserWindow({width: 1800, height: 1000, icon: __dirname + '/src/assets/dofucks.png'});
+			mainWindow = new BrowserWindow({
+				width: 1800,
+				height: 1000,
+				frame: false,
+				title: 'Dofucks',
+				icon: __dirname + '/src/assets/dofucks.png',
+				webPreferences: {
+					backgroundThrottling: false,
+					//offscreen: true
+				}
+			});
 			mainWindow.loadURL('file://' + __dirname + '/src/browser/index.html');
+			mainWindow.webContents.setUserAgent("Mozilla/5.0 (Linux; Android 7.1.1; ONEPLUS A5000 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Crosswalk/15.44.384.13 Mobile Safari/537.36")
+			mainWindow.webContents.setFrameRate(5);
+			//mainWindow.setMinimizable(false);
 			mainWindow.openDevTools();
 			mainWindow.on('closed', function() {
 				mainWindow = null;

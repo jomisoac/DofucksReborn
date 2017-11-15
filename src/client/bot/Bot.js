@@ -8,9 +8,9 @@ import Harvester from './widgets/Harvester';
 import XPer from './widgets/XPer';
 import Notifications from './widgets/Notifications';
 import Characteristics from './widgets/Characteristics';
+import GeneralOptions from './widgets/GeneralOptions';
 import Sitter from './widgets/Sitter';
 import Deleter from './widgets/Deleter';
-import Module from './Module';
 
 import Utils from './util/Utils';
 import Mover from './util/Mover';
@@ -24,21 +24,43 @@ import Farmer from './util/Farmer';
 import DofucksSitter from './util/Sitter';
 import Follower from './util/Follower';
 import CharacteristicsUpgrader from './util/CharacteristicsUpgrader';
+import FpsManipulator from './util/FpsManipulator';
 
 import Analytics from '../app/Analytics';
 
-class Bot extends Module {
+class Bot extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
     }
   }
 
-  ready() {
-    this.props.win.Dofucks = {
-      weightLimitPercentage: 0,
-      isLocked: false,
+  checkReady() {
+    if (this.props.win && this.props.win.document.readyState == "complete") {
+      this.ready();
+    } else {
+      setTimeout(() => {
+        this.checkReady();
+      }, 100);
     }
+  }
+
+  componentDidMount() {
+    if (this.props.win) {
+      this.props.win.Dofucks = {
+        weightLimitPercentage: 0,
+        isLocked: false,
+      }
+      this.props.win.Dofucks.FpsManipulator = new FpsManipulator(this.props.win);
+      this.checkReady();
+    } else {
+      setTimeout(() => {
+        this.componentDidMount();
+      }, 10);
+    }
+  }
+
+  ready() {
     new KeyGrabber(this.props.win);
     //this.props.win.Dofucks.Analytics = new Analytics(this.props.win);
     this.props.win.Dofucks.Utils = new Utils(this.props.win);
@@ -58,6 +80,7 @@ class Bot extends Module {
     return (
       <MuiThemeProvider>
         <div className="dofucks">
+          <GeneralOptions win={this.props.win}/>
           <Dofucks win={this.props.win}/>
           <Fighter win={this.props.win}/>
           <Harvester win={this.props.win}/>

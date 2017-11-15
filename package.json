@@ -33,7 +33,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "electron-dl": "^1.10.0"
+    "electron-dl": "^1.10.0",
+    "webpack-encoding-plugin": "^0.2.1"
   },
   "scripts": {
     "start": "NODE_ENV=development ./node_modules/.bin/electron .",

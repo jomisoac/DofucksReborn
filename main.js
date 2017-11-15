@@ -37,7 +37,6 @@ app.on('ready', function() {
 			mainWindow = new BrowserWindow({
 				width: 1800,
 				height: 1000,
-				frame: false,
 				title: 'Dofucks',
 				icon: __dirname + '/src/assets/dofucks.png',
 				webPreferences: {
@@ -47,7 +46,7 @@ app.on('ready', function() {
 			});
 			mainWindow.loadURL('file://' + __dirname + '/src/browser/index.html');
 			mainWindow.webContents.setUserAgent("Mozilla/5.0 (Linux; Android 7.1.1; ONEPLUS A5000 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Crosswalk/15.44.384.13 Mobile Safari/537.36")
-			mainWindow.webContents.setFrameRate(5);
+			//mainWindow.webContents.setFrameRate(5);
 			//mainWindow.setMinimizable(false);
 			mainWindow.openDevTools();
 			mainWindow.on('closed', function() {

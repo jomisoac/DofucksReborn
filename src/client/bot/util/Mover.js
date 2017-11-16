@@ -45,7 +45,7 @@ class Mover {
 
   isCellFree(cellId) {
 		var occupiedCells = this.window.isoEngine.actorManager.occupiedCells;
-    return !!occupiedCells[cellId];
+    return !occupiedCells[cellId];
 	}
 
 	isMobOnCell(cellId) {
@@ -99,6 +99,14 @@ class Mover {
 		} while (cell.cellId === null && tries > 0);
 		return cell;
 	}
+
+  moveToNearestFreeWalkableCell(cb) {
+		var cellId = this.window.isoEngine.actorManager.userActor.cellId;
+    var nc = this.window.utils.mapPoint.getNeighbourCells(cellId, true).filter((e) => {
+      return this.isCellFree(e) && this.window.isoEngine.mapRenderer.isWalkable(e)
+    });
+    this.goToCell(nc[random.integer(0, nc.length-1)], cb);
+  }
 
   waitMapLoadThen(callback, wait) {
     if (wait === undefined) {

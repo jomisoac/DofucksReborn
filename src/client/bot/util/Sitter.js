@@ -5,6 +5,7 @@ class Sitter {
     this.window = win;
     this.lowLifePercentage = 50;
     this.activeTimeout = 0;
+    this.activeInterval = 0;
     this.regenRate = 10;
   }
 
@@ -12,20 +13,37 @@ class Sitter {
     if (!this.isLowLife()) {
       return callback();
     }
+    this.callback = callback;
 		console.debug("[SITTER] Sit due to low life (health < "+this.lowLifePercentage+"%)");
 		setTimeout(() => {
       this.window.dofus.connectionManager.once("LifePointsRegenBeginMessage", (e) => {
         this.regenRate = e.regenRate;
         var timer = this.getRegenTimeToBeFullLife();
-        this.activeTimeout = setTimeout(() => {
-          console.debug("[SITTER] Full life !");
-          this.activeTimeout = 0;
-          callback();
-        }, timer);
+        if (!activeTimeout) {
+          this.activeTimeout = setTimeout(this.onFullLife.bind(this), timer);
+        }
+        if (!activeInterval) {
+          this.activeInterval = setInterval(this.pingNoAfkPopup.bind(this), 60000);
+        }
       });
 			this.window.dofus.connectionManager.sendMessage("EmotePlayRequestMessage", {emoteId: 1});
 		}, random.integer(1000, 3000));
 	}
+
+  pingNoAfkPopup() {
+    this.window.utils.inactivityManager.recordActivity();
+  }
+
+  onFullLife() {
+    console.debug("[SITTER] Full life !");
+    this.clearInterval(this.activeInterval);
+    this.activeTimeout = 0;
+    this.activeInterval = 0;
+    if (this.callback) {
+      this.callback();
+    }
+    this.callback = null;
+  }
 
 	getRegenTimeToBeFullLife() {
 		var regenRate = this.regenRate*100;

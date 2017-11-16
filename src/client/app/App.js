@@ -15,29 +15,37 @@ class App extends React.Component {
     this.state = {
       selectedTab: 0,
       tabs: {
-        0: {key: 0, label: 'N/A', win: null}
+        0: {key: 0, name: 'N/A', lvl: "", win: null}
       },
       cwin: null
     };
   }
 
   CharacterSelectedSuccessMessage(e) {
-    var label = e.infos.name + " ("+e.infos.level+")";
     var tabs = this.state.tabs;
     var tab = tabs[this.state.selectedTab];
-    tab.label = label;
+    tab.name = e.infos.name;
+    tab.lvl = e.infos.level;
+    this.setState({tabs: tabs});
+  }
+
+  CharacterLevelUpMessage(e) {
+    var tabs = this.state.tabs;
+    var tab = tabs[this.state.selectedTab];
+    tab.lvl = e.newLevel;
     this.setState({tabs: tabs});
   }
 
   handleAddTab() {
     var tabs = this.state.tabs;
     var key = nextKey++;
-    tabs[key] = {key: key, label: "N/A", win: null};
+    tabs[key] = {key: key, name: "N/A", lvl: "", win: null};
     this.setState({tabs: tabs});
   }
 
   handleDeleteTab(key) {
     var tabs = this.state.tabs;
+    if (!confirm("Are you sure you want to close " + (tabs[key].name == "N/A" ? "this" : tabs[key].name + "'s") + " tab ?")) return;
     delete tabs[key];
     this.setState({tabs: tabs});
   }
@@ -51,6 +59,7 @@ class App extends React.Component {
       tab.win.key = tab.key;
       setTimeout(() => {
         tab.win.dofus.connectionManager.on("CharacterSelectedSuccessMessage", this.CharacterSelectedSuccessMessage.bind(this));
+        tab.win.dofus.connectionManager.on("CharacterLevelUpMessage", this.CharacterLevelUpMessage.bind(this));
         tab.win.dofus.connectionManager.on("data", (data) => console.log(data));
       }, 1000);
       if (key == 0) {
@@ -86,7 +95,7 @@ class App extends React.Component {
           this.handleDeleteTab(k);
         }}
       >
-        {this.state.tabs[k].label}
+        {this.state.tabs[k].name} {this.state.tabs[k].lvl && "("+this.state.tabs[k].lvl+")"}
       </Chip>
     )
   }

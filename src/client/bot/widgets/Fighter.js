@@ -10,6 +10,7 @@ import AutoJoin from '../modules/fighter/AutoJoin';
 import AutoLock from '../modules/fighter/AutoLock';
 import AutoSkipTurn from '../modules/fighter/AutoSkipTurn';
 import CloseFightEndWindow from '../modules/fighter/CloseFightEndWindow';
+import CloseLevelUpWindow from '../modules/fighter/CloseLevelUpWindow';
 import Timers from '../modules/fighter/Timers';
 import Priorities from '../modules/fighter/Priorities';
 import SpellList from '../modules/fighter/SpellList';
@@ -55,6 +56,7 @@ class Fighter extends Module {
           <AutoLock win={this.props.win}/>
           <AutoSkipTurn win={this.props.win}/>
           <CloseFightEndWindow win={this.props.win}/>
+          <CloseLevelUpWindow win={this.props.win}/>
         </List>
         <Timers win={this.props.win}/>
         <Priorities win={this.props.win}/>

@@ -3,7 +3,7 @@ let NotifOptions = {
   lang: "fr",
   body: "Notification",
   tag: "tag0",
-  icon: './img/dofucks.png',
+  icon: '../assets/dofucks.png',
   silent: true
 }
 

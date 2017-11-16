@@ -32,7 +32,7 @@ class XPer {
 	}
 
 	restartXp() {
-		console.debug("Restarting to XP");
+		console.debug("[XPER] Restarting to XP");
 		var xper = Xper();
 		xper.locked = false;
 		TimersJS.oneShot(random.integer(2000, 3500), function() {
@@ -49,7 +49,7 @@ class XPer {
   }
 
 	xp() {
-		if (!this.isAuthorized) {
+		if (!this.isAuthorized || this.window.Dofucks.Path.isLost) {
 			return false;
 		}
 		//console.debug("[XPER] xp()");
@@ -79,8 +79,12 @@ class XPer {
 				if (totalLevel >= this.minLvl && totalLevel <= this.maxLvl) {
           this.window.Dofucks.Mover.goToCell(mob._position, () => {
 						setTimeout(() => {
-							this.goCheckMobs();
-						}, 500);
+							this.window.Dofucks.Mover.moveToNearestFreeWalkableCell(() => {
+								setTimeout(() => {
+									this.goCheckMobs();
+								}, random.integer(500, 1000))
+							})
+						}, random.integer(500, 1000));
 					}, false);
 					//this.window.isoEngine.attackActor(mob.actorId);
 					return true;

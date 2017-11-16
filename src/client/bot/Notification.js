@@ -62,7 +62,7 @@ class Notification extends Module {
     if (icon != undefined) {
       options.icon = icon;
     }
-    new window.Notification(title, options);
+    new window.Notification('('+this.props.win.gui.playerData.characterBaseInformations.name + ') ' + title, options);
   }
 }
 

@@ -4,6 +4,7 @@ import Widget from './Widget';
 import Module from '../Module';
 
 import ItemsToDelete from '../modules/deleter/ItemsToDelete';
+import DeleteNow from '../modules/deleter/DeleteNow';
 
 class Deleter extends Module {
   constructor(props) {
@@ -14,6 +15,7 @@ class Deleter extends Module {
     return (
       <Widget title="Deleter">
         <ItemsToDelete win={this.props.win}/>
+        <DeleteNow win={this.props.win}/>
       </Widget>
     )
   }

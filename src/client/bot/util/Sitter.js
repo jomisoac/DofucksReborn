@@ -19,10 +19,10 @@ class Sitter {
       this.window.dofus.connectionManager.once("LifePointsRegenBeginMessage", (e) => {
         this.regenRate = e.regenRate;
         var timer = this.getRegenTimeToBeFullLife();
-        if (!activeTimeout) {
+        if (!this.activeTimeout) {
           this.activeTimeout = setTimeout(this.onFullLife.bind(this), timer);
         }
-        if (!activeInterval) {
+        if (!this.activeInterval) {
           this.activeInterval = setInterval(this.pingNoAfkPopup.bind(this), 60000);
         }
       });
@@ -31,12 +31,13 @@ class Sitter {
 	}
 
   pingNoAfkPopup() {
+    console.debug("[SITTER] No AFK popup while sitting.");
     this.window.utils.inactivityManager.recordActivity();
   }
 
   onFullLife() {
     console.debug("[SITTER] Full life !");
-    this.clearInterval(this.activeInterval);
+    clearInterval(this.activeInterval);
     this.activeTimeout = 0;
     this.activeInterval = 0;
     if (this.callback) {

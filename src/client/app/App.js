@@ -72,6 +72,7 @@ class App extends React.Component {
 
   renderChip(k) {
     let color = k == this.state.selectedTab ? blue300 : '';
+    // to display level : {this.state.tabs[k].lvl && "("+this.state.tabs[k].lvl+")"}
     return (
       <Chip
         className="chip"
@@ -95,7 +96,7 @@ class App extends React.Component {
           this.handleDeleteTab(k);
         }}
       >
-        {this.state.tabs[k].name} {this.state.tabs[k].lvl && "("+this.state.tabs[k].lvl+")"}
+        {this.state.tabs[k].name}
       </Chip>
     )
   }

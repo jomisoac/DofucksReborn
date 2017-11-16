@@ -28,6 +28,9 @@ class Mover {
 	}
 
   parsePosition(position) {
+    if (!position) {
+      return alert("Please select a path file before trying to XP or Harvest.");
+    }
 		if (position.indexOf(',') === -1 || position.length < 3) {
 			return console.error("Wrong position: "+ position), false;
 		}

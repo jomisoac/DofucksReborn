@@ -40,6 +40,7 @@ const template = [
   {
     role: 'help',
     submenu: [
+      {label: 'Dofucks v'+appVersion, enabled: false},
       {
         label: 'dofucks.com',
         click () { require('electron').shell.openExternal('http://dofucks.com') }

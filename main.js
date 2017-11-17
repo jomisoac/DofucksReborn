@@ -13,7 +13,39 @@ var CheckAssets = require('./src/electron/tasks/CheckAssets');
 var FileManipulator = require('./src/electron/tasks/FileManipulator');
 var AssetMapGetter = require('./src/electron/tasks/AssetMapGetter');
 
-var downloaded = false;
+var updateFeed = '';
+
+if (process.env.NODE_ENV !== 'development') {
+	updateFeed = os === 'darwin' ?
+		'http://dofucks.com:1337/updates/latest' :
+		'http://download.dofucks.com/win32';
+
+	autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion);
+	autoUpdater.checkForUpdates();
+	autoUpdater.on('update-available', () => {
+		console.log('update available');
+	});
+	autoUpdater.on('update-not-available', () => {
+	});
+	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+		const dialogOpts = {
+			type: 'info',
+			buttons: ['Restart', 'Later'],
+			title: 'Application Update',
+			message: process.platform === 'win32' ? releaseNotes : releaseName,
+			detail: 'A new version has been downloaded. Restart the application to apply the update.'
+		}
+
+		dialog.showMessageBox(dialogOpts, (response) => {
+			if (response === 0) autoUpdater.quitAndInstall()
+		})
+	});
+	autoUpdater.on('error', message => {
+		console.error('There was a problem updating the application')
+		console.error(message);
+		//inform_err(win, message);
+	});
+}
 
 app.on('window-all-closed', function() {
 	if (process.platform != 'darwin') {
@@ -90,43 +122,6 @@ app.on('ready', function() {
 		});
 	}
 
-  function upd() {
-    var updateFeed = '';
-
-    if (process.env.NODE_ENV !== 'development') {
-      updateFeed = os === 'darwin' ?
-        'http://dofucks.com:1337/updates/latest' :
-        'http://download.dofucks.com/win32';
-
-    	autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion);
-    	autoUpdater.checkForUpdates();
-    	autoUpdater.on('update-available', () => {
-    		console.log('update available');
-    	});
-    	autoUpdater.on('update-not-available', () => {
-    	});
-    	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-				downloaded = true;
-    		const dialogOpts = {
-    			type: 'info',
-    			buttons: ['Restart', 'Later'],
-    			title: 'Application Update',
-    			message: process.platform === 'win32' ? releaseNotes : releaseName,
-    			detail: 'A new version has been downloaded. Restart the application to apply the update.'
-    		}
-
-    		dialog.showMessageBox(dialogOpts, (response) => {
-    			if (response === 0) autoUpdater.quitAndInstall()
-    		})
-    	});
-    	autoUpdater.on('error', message => {
-    	  console.error('There was a problem updating the application')
-    	  console.error(message);
-        //inform_err(win, message);
-    	});
-    }
-  }
-
 	function inform(win, text, pct) {
 		win.webContents.send('loadingData', {
 			"text": text,
@@ -142,10 +137,8 @@ app.on('ready', function() {
   //win.openDevTools();
 	win.webContents.on('did-finish-load', (event, input) => {
 		checkAssets();
-    upd();
 		setInterval(() => {
-			if (downloaded) return;
-			upd();
+			autoUpdater.checkForUpdates();
 		}, 1000*60*10);
 	})
 });

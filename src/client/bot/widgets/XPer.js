@@ -4,6 +4,7 @@ import Widget from './Widget';
 import Module from '../Module';
 
 import LevelMinMax from '../modules/xper/LevelMinMax';
+import MonsterChoser from '../modules/xper/MonsterChoser';
 
 class XPer extends Module {
   constructor(props) {
@@ -40,6 +41,7 @@ class XPer extends Module {
         onDisable={this.onDisable.bind(this)}
       >
         <LevelMinMax win={this.props.win} />
+        <MonsterChoser win={this.props.win} />
       </Widget>
     )
   }

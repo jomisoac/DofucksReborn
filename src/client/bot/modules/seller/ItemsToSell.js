@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ItemSearcher from '../../util/ItemSearcher';
+import ItemSearcher from '../util/ItemSearcher';
 
 class ItemsToSell extends React.Component {
   constructor(props) {

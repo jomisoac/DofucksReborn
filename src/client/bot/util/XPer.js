@@ -1,12 +1,14 @@
 var random = require("random-js")();
 
+import {MonsterCondition, MonsterConditions} from './XPer/MonsterConditions';
+
 class XPer {
 	constructor(win) {
 		this.window = win;
 		this.enabled = false;
 		this.minLvl = 0;
 		this.maxLvl = 30;
-		this.lowLifePercentage = 50;
+		this.monsterConditions = new MonsterConditions();
 		this.fightCount = 0;
 		this.amIInFightTimeout = 0;
 		this.regenRate = 10;
@@ -76,7 +78,7 @@ class XPer {
 				for (var k = 0; k < mobs.length; k++) {
 					totalLevel += mobs[k].staticInfos.level;
 				}
-				if (totalLevel >= this.minLvl && totalLevel <= this.maxLvl) {
+				if (totalLevel >= this.minLvl && totalLevel <= this.maxLvl && this.monsterConditions.respectsConditions(mob.data.staticInfos)) {
           this.window.Dofucks.Mover.goToCell(mob._position, () => {
 						setTimeout(() => {
 							this.window.Dofucks.Mover.moveToNearestFreeWalkableCell(() => {

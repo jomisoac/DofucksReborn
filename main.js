@@ -1,5 +1,6 @@
-var electron, {app, BrowserWindow, Tray, autoUpdater, dialog, session, powerSaveBlocker} = require('electron');
-if (require('./src/electron/sqrlwin')(app)) return;
+function isDev() {return process.mainModule.filename.indexOf('app.asar') === -1}
+var {app, BrowserWindow, Tray, autoUpdater, dialog, session, powerSaveBlocker} = require('electron');
+if (isDev() && require('./src/electron/sqrlwin')(app)) return;
 
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 powerSaveBlocker.start('prevent-app-suspension');
@@ -13,9 +14,8 @@ var CheckAssets = require('./src/electron/tasks/CheckAssets');
 var FileManipulator = require('./src/electron/tasks/FileManipulator');
 var AssetMapGetter = require('./src/electron/tasks/AssetMapGetter');
 
-var updateFeed = '';
-
-if (process.env.NODE_ENV !== 'development') {
+if (!isDev()) {
+	var updateFeed = '';
 	updateFeed = os === 'darwin' ?
 		'http://dofucks.com:1337/updates/latest' :
 		'http://download.dofucks.com/win32';
@@ -43,7 +43,6 @@ if (process.env.NODE_ENV !== 'development') {
 	autoUpdater.on('error', message => {
 		console.error('There was a problem updating the application')
 		console.error(message);
-		//inform_err(win, message);
 	});
 }
 
@@ -72,8 +71,7 @@ app.on('ready', function() {
 				title: 'Dofucks',
 				icon: __dirname + '/src/assets/dofucks.png',
 				webPreferences: {
-					backgroundThrottling: false,
-					//offscreen: true
+					backgroundThrottling: false
 				}
 			});
 			mainWindow.loadURL('file://' + __dirname + '/src/browser/index.html');
@@ -137,8 +135,10 @@ app.on('ready', function() {
   //win.openDevTools();
 	win.webContents.on('did-finish-load', (event, input) => {
 		checkAssets();
-		setInterval(() => {
-			autoUpdater.checkForUpdates();
-		}, 1000*60*10);
+		if (!isDev()) {
+			setInterval(() => {
+				autoUpdater.checkForUpdates();
+			}, 1000*60*10);
+		}
 	})
 });

@@ -4,7 +4,7 @@
   "main": "main.js",
   "productName": "Dofucks",
   "author": "SwiTool",
-  "description": "Play or let the game be played on its own",
+  "description": "Watch the game being played",
   "devDependencies": {
     "axios": "^0.17.0",
     "babel-core": "^6.7.2",
@@ -37,7 +37,7 @@
     "webpack-encoding-plugin": "^0.2.1"
   },
   "scripts": {
-    "start": "NODE_ENV=development ./node_modules/.bin/electron .",
+    "start": "./node_modules/.bin/electron .",
     "create_asar": "./create_asar.sh",
     "pack:osx": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=darwin --arch=x64 --sign='DofucksSquirrel' --icon=src/assets/dofucks.icns --asar --overwrite",
     "pack:unix": "./node_modules/.bin/electron-packager repo_tmp $npm_package_productName --app-version=$npm_package_version --out=builds --ignore='^/builds$' --platform=linux --arch=x64 --icon=src/assets/dofucks.ico --asar --overwrite",

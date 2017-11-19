@@ -30,7 +30,12 @@ class ItemSearcher extends Module {
 
   fetchItems() {
     if (this.state.searchText.length < 3) return;
-    axios.get('http://dofucks.com:8000/search/items?q='+this.state.searchText+'&l='+this.props.win.Config.language)
+    axios.get('http://dofucks.com:8000/search/items', {
+      params: {
+        q: this.state.searchText,
+        l: this.props.win.Config.language
+      }
+    })
     .then(r => {
       var items = [];
       r.data.forEach((e, i) => {

@@ -8,8 +8,8 @@ class SpellList extends Module {
   constructor(props) {
     super(props)
     this.tag = "spells_to_use";
-    this.state["spells"] = []
     this.state._[this.tag] = [];
+    this.state.spells = []
     this.stateSpells = [];
   }
 
@@ -73,19 +73,18 @@ class SpellList extends Module {
   }
 
   render() {
+    var spells = this.state.spells.map((e, i) => {
+      return (
+        <Spell key={i} spellId={e.spellId} iconId={e.iconId}
+        onSelectSpell={this.onSelectSpell.bind(this)}
+        selected={this.state._[this.tag].indexOf(e.spellId) !== -1}
+        />
+      )
+    });
     return (
       <Grid>
         <Row is="nospace">
-          {
-            this.state.spells.map((e, i) => {
-              return (
-                <Spell key={i} spellId={e.spellId} iconId={e.iconId}
-                onSelectSpell={this.onSelectSpell.bind(this)}
-                selected={this.state._[this.tag].indexOf(e.spellId) !== -1}
-                />
-              )
-            })
-          }
+          { spells }
         </Row>
       </Grid>
     );

@@ -3,7 +3,7 @@
 mkdir -p repo_tmp
 
 # Copy needed resources to new folder and go into it
-cp -R src main.js package.json webpack.config.js repo_tmp
+cp -R src main.js package.json webpack.*.js repo_tmp
 cd repo_tmp
 
 # remove development index.html
@@ -22,7 +22,7 @@ rm -rf src/assets/Dofucks.ai
 rm -rf src/assets/dofucks.icns
 rm -rf src/assets/Dofucks.svg
 rm -rf package-lock.json
-rm -rf webpack.config.js
+rm -rf webpack.*.js
 
 # moving back to the root directory, pack with asar
 cd ..

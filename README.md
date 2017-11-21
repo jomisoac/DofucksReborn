@@ -77,5 +77,7 @@ You can join my discord here : [Discord server](https://discord.gg/e5S8EvV)
 ├── pack_n_sign.sh                      # Shortcut to sign the Mac app
 ├── package.json
 ├── paths.json
-├── webpack.config.js
+├── webpack.common.js                   # Used for both prod and dev
+├── webpack.dev.js
+├── webpack.prod.js
 ```

@@ -30,7 +30,8 @@
     "socket.io-client": "^2.0.3",
     "style-loader": "^0.19.0",
     "webpack": "^1.15.0",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-merge": "^4.1.1"
   },
   "dependencies": {
     "electron-dl": "^1.10.0",
@@ -47,8 +48,8 @@
     "installer:osx": "./node_modules/.bin/electron-installer-dmg --icon=src/assets/dofucks.ico builds/Dofucks-darwin-x64/Dofucks.app/ builds/Dofucks",
     "installer:win": "./node_modules/.bin/grunt create-windows-installer",
     "installer:win32": "./node_modules/.bin/grunt create-windows-installer32",
-    "prod": "./node_modules/.bin/webpack -p",
-    "watch": "./node_modules/.bin/webpack-dev-server",
+    "prod": "./node_modules/.bin/webpack --config webpack.prod.js",
+    "watch": "./node_modules/.bin/webpack-dev-server --config webpack.dev.js",
     "electron-rebuild": "./node_modules/.bin/electron-rebuild"
   }
 }

@@ -15,7 +15,9 @@ class FpsManager extends Module {
   }
 
   onLoaded(data) {
-    this.props.win.Dofucks.CharacteristicsUpgrader.toUpgrade = data;
+    if (data) {
+      this.setFps(data);
+    }
     return data;
   }
 

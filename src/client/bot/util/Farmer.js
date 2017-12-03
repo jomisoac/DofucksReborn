@@ -19,8 +19,8 @@ class Farmer {
 
 	GameFightEndMessage(e) {
     if (!this.isActivated()) {
-      console.debug("[FARMER] We are not using nor deleting nor sitting since XPer or Harvester are not enabled.");
-      return;
+      //console.debug("[FARMER] We are not using nor deleting nor sitting since XPer or Harvester are not enabled.");
+      //return;
     }
     this.window.dofus.connectionManager.once('CurrentMapMessage', (e) => {
       setTimeout(() => {
@@ -82,7 +82,6 @@ class Farmer {
   }
 
   processHarvest() {
-    //console.debug("[FARMER] Processing HARVESTER");
     if (!this.Harvester.enabled) {
       return false;
     }
@@ -97,7 +96,6 @@ class Farmer {
   }
 
   processXP() {
-    //console.debug("[FARMER] Processing XPER");
     if (!this.XPer.enabled) {
       return false;
     }

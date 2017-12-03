@@ -38,14 +38,20 @@ class Fighter {
       244,250,251,252,253,254,260,261,262,263,264,1039,1040,281,282,283,284,285,286,287,
       288,289,290,291,292,293,1054
     ];
-	this.window.dofus.connectionManager.on("GameFightStartingMessage", this.GameFightStartingMessage.bind(this));
+    this.window.dofus.connectionManager.on("GameFightStartingMessage", this.GameFightStartingMessage.bind(this));
     this.window.dofus.connectionManager.on("GameFightEndMessage", this.GameFightEndMessage.bind(this));
     this.window.dofus.connectionManager.on("GameFightPlacementPossiblePositionsMessage", this.GameFightPlacementPossiblePositionsMessage.bind(this));
     this.window.dofus.connectionManager.on("GameEntitiesDispositionMessage", this.GameEntitiesDispositionMessage.bind(this));
     this.window.dofus.connectionManager.on("GameFightTurnStartMessage", this.GameFightTurnStartMessage.bind(this));
     this.window.dofus.connectionManager.on("GameActionFightNoSpellCastMessage", this.GameActionFightNoSpellCastMessage.bind(this));
     this.window.dofus.connectionManager.on("GameFightNewRoundMessage", this.GameFightNewRoundMessage.bind(this));
+    this.window.dofus.connectionManager.on("GameFightSynchronizeMessage", this.GameFightSynchronizeMessage.bind(this));
+    this.window.dofus.connectionManager.on("GameFightTurnResumeMessage", this.GameFightTurnResumeMessage.bind(this));
   }
+
+  /**
+  ** When a fight starts
+  **/
 
   GameFightStartingMessage(e) {
     if (!this.enabled) {
@@ -54,6 +60,10 @@ class Fighter {
     console.debug("[FIGHT] Starting");
 	}
 
+  /**
+  ** When a fight ends
+  **/
+
   GameFightEndMessage(e) {
     if (!this.enabled) {
       return;
@@ -61,36 +71,64 @@ class Fighter {
     console.debug("[FIGHT] Stopping");
   }
 
+  /**
+  ** When the fight synchronizes. It helps us to know from which team we are.
+  **/
+
+  GameFightSynchronizeMessage(e) {
+    for (var i in e.fighters) {
+      var fighter = e.fighters[i];
+      if (fighter.contextualId == this.window.gui.playerData.id) {
+        this.teamId = fighter.teamId;
+      }
+    }
+  }
+
+  /**
+  ** When we reconnect in fight, it is like a TurnStart
+  **/
+
+  GameFightTurnResumeMessage(e) {
+    console.debug("[FIGHT] Resume");
+    this.GameFightTurnStartMessage(e);
+  }
+
+  /**
+  ** Returns an array of free cell ids from the array of cell ids in parameter
+  **/
+
+  getFreeCellsFromCells(cells) {
+    var freeCells = [];
+    for (var i in cells) {
+      var cellId = cells[i];
+      if (this.getActorOnCell(cellId) == cellId) {
+        freeCells.push(cellId);
+      }
+    }
+    return freeCells;
+  }
+
 	GameFightPlacementPossiblePositionsMessage(e) {
+    this.teamId = e.teamNumber;
     if (!this.enabled) {
       return;
     }
-		this.teamId = e.teamNumber;
 
 		var currenctCellId = this.window.isoEngine.actorManager.userActor.cellId;
 		var currentDistance = false;
 		var finalCellId = -1;
-		var positions;
-		if (this.teamId == 0) {
-			positions = e.positionsForChallengers;
-		} else {
-			positions = e.positionsForDefenders;
-		}
+		var positions = this.teamId == 0 ? e.positionsForChallengers : e.positionsForDefenders;
 		setTimeout(() => {
-			var enemies = this.getAliveEnemies();
-			for (var i = 0; i < enemies.length; i++) {
-				var enemy = enemies[i];
-				var cellId = enemy.data.disposition.cellId;
-				for (var j = 0; j < positions.length; j++) {
-					var cellPos = positions[j];
-					// distance without pathfinder
-					var distance = this.window.utils.losDetector.getCellDistance(cellPos, cellId);
-					if (finalCellId == -1 || (this.berserker ? (distance > 1 && distance < currentDistance) : (distance > currentDistance))) {
-						finalCellId = cellPos;
-						currentDistance = distance;
-					}
-				}
-			}
+      positions = this.getFreeCellsFromCells(positions);
+      for (var index in positions) {
+        var cellId = positions[index];
+        var enemy = this.getClosestFighterOfCell(cellId, this.getAliveEnemies())
+        var distance = this.window.utils.losDetector.getCellDistance(enemy.data.disposition.cellId, cellId);
+        if (finalCellId == -1 || (this.berserker ? (distance > 1 && distance < currentDistance) : (distance > currentDistance))) {
+          finalCellId = cellId;
+          currentDistance = distance;
+        }
+      }
 			if (finalCellId != -1) {
 				setTimeout(() => {
 					this.window.dofus.sendMessage("GameFightPlacementPositionRequestMessage", {cellId: finalCellId});
@@ -102,9 +140,17 @@ class Fighter {
 		}, random.integer(1000, 2000));
 	}
 
+  /**
+  ** When a new round begins
+  **/
+
 	GameFightNewRoundMessage(e) {
 		this.turn = e.roundNumber;
 	}
+
+  /**
+  ** When it is someone's turn to play, including ours.
+  **/
 
 	GameFightTurnStartMessage(e) {
     if (!this.enabled) {
@@ -113,20 +159,21 @@ class Fighter {
 		var id = e.id;
 		this.refreshSpellData();
 		if (this.window.gui.playerData.id == id) {
-			// our turn
 			this.ourTurn = true;
       if (this.skipTurn) {
         this.finishMyTurn();
       } else {
         this.anotherAction();
       }
-			//Notifier().notifyMe('turnStarts', "It's your turn to play", "You get "+(e.waitTime/1000)+" seconds to play");
 		} else {
 			this.ourTurn = false;
 		}
 	}
 
-	// called when somebody moves before the fight starts
+  /**
+  ** When someone moves before fight starts
+  **/
+
 	GameEntitiesDispositionMessage(e) {
     if (!this.enabled) {
       return;
@@ -137,6 +184,10 @@ class Fighter {
 		*/
 	}
 
+  /**
+  ** When you tried to cast a spell that did not succeed
+  **/
+
 	GameActionFightNoSpellCastMessage(e) {
     if (!this.enabled) {
       return;
@@ -145,7 +196,6 @@ class Fighter {
 			this.finishMyTurn();
 		}
 	}
-
 
 	refreshSpellData() {
 		var spellData = this.window.gui.playerData.characters.mainCharacter.spellData;
@@ -203,6 +253,11 @@ class Fighter {
 	getEnemiesInZone(zone) {
 		return this.getFightersFromTeamInZone(zone, this.teamId == 0 ? 1 : 0);
 	}
+
+  /**
+  ** Los is "Line Of Sight", it returns all targettable cells from a cellId
+  ** This function is inspired from DT's one
+  **/
 
 	testLos(mapCells, a, cellId, visibleActors) {
 		var mp = this.window.utils.mapPoint.getMapPointFromCellId(cellId);
@@ -329,6 +384,11 @@ class Fighter {
 		return true;
 	}
 
+  /**
+  ** Highest distance does not mean "great cell" because it may be a trap.
+  ** This function is not working like it should.
+  **/
+
 	moveAway() {
 		var highestDistance = 0;
 		var highestDistanceCellId = 0;
@@ -362,6 +422,11 @@ class Fighter {
 		this.move(path);
 		return true;
 	}
+
+  /**
+  ** Tests if we can cast a spell on an actor. It barely works.
+  ** I think "targetsThisTurn" is broken.
+  **/
 
 	canCastSpell(spell, actor) {
 		var me = this.window.gui.fightManager.getAvailableFighters()[this.window.gui.playerData.id];

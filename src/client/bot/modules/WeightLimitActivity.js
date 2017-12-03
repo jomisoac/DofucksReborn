@@ -42,7 +42,11 @@ class WeightLimitActivity extends Module {
       weight: weight
     });
     if (weight >= this.state._[this.tag].limit && !this.props.win.Dofucks.isLocked) {
-      this.props.win.Dofucks.Seller.sell();
+      this.props.win.Dofucks.Deleter.deleteThen(null, (hasDeleted) => {
+        if (!hasDeleted) {
+          this.props.win.Dofucks.Seller.sell();
+        }
+      })
     }
   }
 

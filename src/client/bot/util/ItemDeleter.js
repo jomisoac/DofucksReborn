@@ -6,6 +6,7 @@ class ItemDeleter {
     this.timeBetweenDeleteMin = 500;
     this.timeBetweenDeleteMax = 1000;
     this.wantToDelete = [];
+    this.hasDeleted = false;
   }
 
   deleteThen(itemsToDelete, callback) {
@@ -23,12 +24,14 @@ class ItemDeleter {
         }
       }
     }
-     if (callback) {
-       callback();
-     }
+    if (callback) {
+      callback(this.hasDeleted);
+      this.hasDeleted = false;
+    }
   }
 
   deleteItem(object, qty) {
+    this.hasDeleted = true;
     var timeout = random.integer(this.timeBetweenDeleteMin, this.timeBetweenDeleteMax);
     setTimeout(() => {
 			console.debug("[ITEM_DELETER] Deleting "+qty+" "+object.objectUID);

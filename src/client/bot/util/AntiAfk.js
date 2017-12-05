@@ -24,7 +24,7 @@ class AntiAfk {
 
   disconnectOverride(reason) {
     if (reason != "INACTIVITY") {
-      this.window.dofus.disconnectBackup();
+      this.window.dofus.disconnectBackup(reason);
     } else {
       console.debug('[ANTIAFK] Shield activated !');
       this.window.Dofucks.Farmer.process();

@@ -47,10 +47,7 @@ class Farmer {
 
   process() {
     if (this.window.Dofucks.isLocked) {
-      console.debug("[FARMER] We are locked due to overload. Retrying in 15 seconds.");
-      setTimeout(() => {
-        this.process();
-      }, 15000);
+      console.debug("[FARMER] We are locked due to overload.");
       return;
     }
     if (this.window.Dofucks.Sitter.activeTimeout) {

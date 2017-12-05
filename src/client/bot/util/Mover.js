@@ -200,13 +200,12 @@ class Mover {
 		var interactives = this.window.isoEngine._getAllInteractives();
 		for (var l = 0; l < interactives.length; l++) {
 			var aggressive = false;
-			var npc = null;
 			var mob = null;
-			var interactive = null;
 			var c = interactives[l];
-			//c.actorId ? c.data && c.data.npcId ? (npc = c) : (mob = c) : (interactive = c);
-			c.actorId ? c.data.npcId ? (npc = c) : (mob = c) : (interactive = c);
-			if (mob && mob.actorId < 0) {
+      if (c.data && c.data.type == "GameRolePlayGroupMonsterInformations") {
+        mob = c;
+      }
+			if (mob) {
 				aggressive = this.aggressives.indexOf(mob.data.staticInfos.mainCreatureLightInfos.creatureGenericId) != -1;
 				var mobs = mob.data.staticInfos.underlings;
 				for (var k = 0; k < mobs.length; k++) {

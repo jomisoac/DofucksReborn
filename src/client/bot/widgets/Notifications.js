@@ -13,6 +13,7 @@ import FightStart from '../modules/notifications/fight/FightStart';
 import FightEnd from '../modules/notifications/fight/FightEnd';
 import TurnStart from '../modules/notifications/fight/TurnStart';
 import ModeratorOnMap from '../modules/notifications/ModeratorOnMap';
+import Disconnected from '../modules/notifications/Disconnected';
 
 class Notifications extends Module {
   constructor(props) {
@@ -35,6 +36,7 @@ class Notifications extends Module {
         <List>
           <LevelUp win={this.props.win}/>
           <TalkInPrivate win={this.props.win}/>
+          <Disconnected win={this.props.win}/>
           <Subheader>Fight</Subheader>
           <FightStart win={this.props.win}/>
           <FightEnd win={this.props.win}/>

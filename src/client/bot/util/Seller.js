@@ -202,12 +202,15 @@ class Seller {
 		return !!this.currentItem;
 	}
 
-  sell() {
+  sellThen(cb) {
     console.debug("[SELLER] I want to sell.");
     this.window.Dofucks.isLocked = true;
     setTimeout(() => {
       this._do(() => {
         this.window.Dofucks.isLocked = false;
+        if (cb) {
+          cb();
+        }
       });
     }, 1000);
   }

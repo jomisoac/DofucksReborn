@@ -1,6 +1,7 @@
 import React from 'react';
 import {ListItem} from 'material-ui/List';
 import Toggle from 'material-ui/Toggle';
+import Slider from 'material-ui/Slider';
 
 import Module from '../Module';
 import Mover from '../util/Mover';
@@ -10,7 +11,7 @@ class SpeedHack extends Module {
     super(props);
     this.tag = "speedhack";
     this.state._[this.tag] = {
-      amount: 500,
+      amount: 50,
       enabled: false
     }
   }
@@ -50,16 +51,34 @@ class SpeedHack extends Module {
       this.start();
       state.enabled = true;
     }
+    state.amount = data.amount;
     return state;
   }
 
+  handleSlider(e, v) {
+    if (this.state._[this.tag].enabled) {
+      this.props.win.isoEngine.actorManager.userActor.speedAdjust = v;
+    }
+    this.setOptionValue('amount', v);
+  }
 
   render() {
     return (
-      <ListItem
-        primaryText="Speedhack"
-        rightToggle={<Toggle onToggle={this.onToggle.bind(this)} toggled={this.state._[this.tag].enabled} />}
-      />
+      <div>
+        <ListItem
+          primaryText={"Speedhack ("+this.state._[this.tag].amount+")"}
+          rightToggle={<Toggle onToggle={this.onToggle.bind(this)} toggled={this.state._[this.tag].enabled} />}
+        />
+        <Slider
+          min={1}
+          max={500}
+          step={1}
+          defaultValue={5}
+          value={this.state._[this.tag].amount}
+          onChange={this.handleSlider.bind(this)}
+          style={{margin: "0 10px"}}
+        />
+      </div>
     )
   }
 }
